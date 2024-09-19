@@ -20,7 +20,7 @@ RUN rm /etc/apt/sources.list.d/cuda.list \
 
 # Install the required packages
 RUN apt-get update && apt-get -y upgrade \
-RUN apt-get install -y ffmpeg libsm6 libxext6 git ninja-build libglib2.0-0 libsm6 libxrender-dev libxext6 lsb-core \
+    && apt-get install -y ffmpeg libsm6 libxext6 git ninja-build libglib2.0-0 libsm6 libxrender-dev libxext6 lsb-core \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
