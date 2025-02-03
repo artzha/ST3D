@@ -68,7 +68,7 @@ class StackSAModuleMSG(nn.Module):
         """
         new_features_list = []
         for k in range(len(self.groupers)):
-            new_features, ball_idxs = self.groupers[k](
+            new_features, ball_idxs = self.groupers[k]( # CUDA kernel fails here
                 xyz, xyz_batch_cnt, new_xyz, new_xyz_batch_cnt, features
             )  # (M1 + M2, C, nsample)
             new_features = new_features.permute(1, 0, 2).unsqueeze(dim=0)  # (1, C, M1 + M2 ..., nsample)
@@ -88,7 +88,6 @@ class StackSAModuleMSG(nn.Module):
             new_features_list.append(new_features)
 
         new_features = torch.cat(new_features_list, dim=1)  # (M1 + M2 ..., C)
-
         return new_xyz, new_features
 
 

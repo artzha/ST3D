@@ -354,7 +354,7 @@ def main():
             opt_search = ["adam_onecycle"]
         elif headfull_stage:
             # lr_search = [1e-2, 1e-3, 1e-4]
-            lr_search = [cfg.OPTIMIZATION.LR, 5e-2, 1e-3, 5e-4]
+            lr_search = [cfg.OPTIMIZATION.LR] #, 5e-2, 1e-3, 5e-4]
             opt_search = ["adam_onecycle"]
         init_launch = True
 

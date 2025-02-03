@@ -121,10 +121,10 @@ def visualize_3d(model, dataloader, pc_msg, bbox_3d_pub, color_map, logger=None)
     pc_list = list(pc_data)
     pc_np = np.array(pc_list, dtype=np.float32)
     data_dict = pcnp_to_datadict(pc_np, dataloader, frame_id=pc_msg.header.seq)
-    
     #2 Perform model inference
     inference_start_time = time.time()
     pred_dicts, _ = model.forward(data_dict)
+
     if logger:
         inference_time = time.time() - inference_start_time
         logger.info(f'VISUALIZE_3D: Inference time {inference_time}')
@@ -132,7 +132,7 @@ def visualize_3d(model, dataloader, pc_msg, bbox_3d_pub, color_map, logger=None)
     #3 Publish detections
     clear_marker_array(bbox_3d_pub)
     bbox_3d_markers = MarkerArray()
-
+    print("num preds ", len(pred_dicts[0]['pred_boxes']))
     pred_boxes      = pred_dicts[0]['pred_boxes'].detach().cpu().numpy()
     pred_labels     = pred_dicts[0]['pred_labels'].detach().cpu().numpy()
     pred_cls_scores = pred_dicts[0]['pred_cls_scores'].detach().cpu().numpy()

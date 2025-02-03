@@ -1,6 +1,9 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import argparse
 from os import path as osp
+import sys
+# Add root to the sys path
+sys.path.append(osp.abspath(osp.join(__file__, '../')))
 
 from tools.data_converter import coda_converter as coda_converter
 
@@ -8,7 +11,8 @@ def coda_data_prep(root_path,
                     info_prefix,
                     out_dir,
                     workers,
-                    resolution):
+                    resolution,
+                    overfit):
     """Prepare the info file for CODa dataset.
 
     Args:
@@ -21,9 +25,11 @@ def coda_data_prep(root_path,
     from tools.data_converter import coda_converter as coda
 
     ### TODO: Set these manually 
-    channels=32
+    channels=resolution
     load_dir = osp.join(root_path, 'coda_original_format')
-    save_dir = osp.join(out_dir, f'coda{channels}_allclass_full')
+    save_dir = osp.join(out_dir, f'coda{channels}_treeonly_full')
+    if overfit:
+        save_dir += '_overfit'
     ###
     
     splits = ['training', 'testing', 'validation']
@@ -33,7 +39,8 @@ def coda_data_prep(root_path,
             save_dir,
             workers=workers,
             split=split,
-            channels=channels
+            channels=channels,
+            overfit=overfit
         )
         converter.convert()
         print("length dataset ", len(converter))
@@ -58,9 +65,10 @@ parser.add_argument(
     required=False,
     help='output directory of kitti formatted dataset. Defaults to ./data')
 parser.add_argument('--extra-tag', type=str, default='coda')
-parser.add_argument('--resolution', type=int, default=32)
+parser.add_argument('--resolution', type=int, default=128)
 parser.add_argument(
     '--workers', type=int, default=4, help='number of threads to be used')
+parser.add_argument('--overfit', action='store_true', help='overfit on a small dataset')
 args = parser.parse_args()
 
 if __name__ == '__main__':
@@ -70,5 +78,6 @@ if __name__ == '__main__':
             info_prefix=args.extra_tag,
             out_dir=args.out_dir,
             workers=args.workers,
-            resolution=args.resolution
+            resolution=args.resolution,
+            overfit=args.overfit
         )

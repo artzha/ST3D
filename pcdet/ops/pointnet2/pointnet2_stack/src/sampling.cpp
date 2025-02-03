@@ -1,11 +1,11 @@
 #include <torch/serialize/tensor.h>
 #include <ATen/cuda/CUDAContext.h>
 #include <vector>
-#include <THC/THC.h>
-
+// #include <THC/THC.h>
+#include <ATen/ATen.h>
 #include "sampling_gpu.h"
 
-extern THCState *state;
+// extern THCState *state;
 #define CHECK_CUDA(x) do { \
   if (!x.type().is_cuda()) { \
     fprintf(stderr, "%s must be CUDA tensor at %s:%d\n", #x, __FILE__, __LINE__); \

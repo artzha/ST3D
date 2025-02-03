@@ -262,7 +262,6 @@ class DatasetTemplate(torch_data.Dataset):
 
         data_dict.pop('gt_names', None)
         data_dict.pop('gt_classes', None)
-
         return data_dict
 
     @staticmethod

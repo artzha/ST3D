@@ -37,7 +37,58 @@ def train_one_epoch(model, optimizer, train_loader, model_func, lr_scheduler, ac
         optimizer.zero_grad()
 
         loss, tb_dict, disp_dict = model_func(model, batch)
+        
+        # """ BEGIN DEBUG BBOXES """
+        # # Save batch as pkl 
+        # import pickle
+        # batch_np = {}
+        # batch_np = {
+        #     'points': batch['points'].cpu().numpy(),
+        #     'gt_boxes': [gt_box.cpu().numpy() for gt_box in batch['gt_boxes']],
+        # }
+        # with open('batch.pkl', 'wb') as f:
+        #     pickle.dump(batch_np, f)
+        # import pdb; pdb.set_trace()
+        # import open3d as o3d
+        # import numpy as np
+        # pc = batch['points'][:, :3].cpu().numpy().astype(np.float32)
+        # pc = pc.reshape(-1, 3)
+        # pc = o3d.geometry.PointCloud(o3d.utility.Vector3dVector(pc))
 
+        # # Create a visualizer object
+        # vis = o3d.visualization.Visualizer()
+        # vis.create_window(visible=False)  # Set visible=False to run in headless mode
+        # vis.add_geometry(pc)
+        
+        # for i in range(0, batch['gt_boxes'][0].shape[0]):
+        #     bbox = batch['gt_boxes'][0][i].cpu().numpy().astype(np.float32)
+        #     # create oriented bbox
+        #     center = bbox[0:3]
+        #     lengths = bbox[3:6]
+        #     yaw = bbox[6]
+        #     # Get SO3 rotation matrix from yaw
+        #     R = o3d.geometry.get_rotation_matrix_from_xyz((0, 0, yaw))
+        #     vis.add_geometry(o3d.geometry.OrientedBoundingBox(center=center, R=R, extent=lengths))
+
+        #     # bbox_list.append(o3d.geometry.OrientedBoundingBox.create_from_points(o3d.utility.Vector3dVector(bbox)))
+        
+        # # Set the camera view (optional)
+        # view_ctl = vis.get_view_control()
+        # view_ctl.set_front([0, 0, -1])
+        # view_ctl.set_up([0, -1, 0])
+        # view_ctl.set_zoom(0.8)
+
+        # # Update the scene and capture the image
+        # vis.poll_events()
+        # vis.update_renderer()
+
+        # # Save the rendered image to a file (off-screen)
+        # vis.capture_screen_image("output_image.png")
+
+        # # Close the visualizer
+        # vis.destroy_window()
+        # """ END DEBUG BBOXES """
+        
         if ft_cfg is not None:
             wandb.log({"loss": loss, "lr": cur_lr, "iter": cur_it})
 

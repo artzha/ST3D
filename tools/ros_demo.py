@@ -8,7 +8,7 @@ import os
 
 # VISUALIZATION TOOLS
 from visual_utils import ros_vis_utils as V
-ROS_DEBUG_FLAG = True
+ROS_DEBUG_FLAG = False
 
 import numpy as np
 import torch

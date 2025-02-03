@@ -37,7 +37,8 @@ class CODa2KITTI(object):
                  workers=64,
                  split="training",
                  test_mode=False,
-                 channels=128):
+                 channels=128,
+                 overfit=False):
         self.filter_empty_3dboxes = True
         self.filter_no_label_zone_points = True
 
@@ -106,65 +107,67 @@ class CODa2KITTI(object):
             # 'TELEVISION',
             # 'VACUUM CLEANER',       
         ]
+
+        # Uncomment classes here to select what classes to include in dataset
         self.coda_to_kitti_class_map = {
             # Full Class List
-            'CAR': 'Car',
-            'PEDESTRIAN': 'Pedestrian',
-            'BIKE': 'Cyclist',
-            'MOTORCYCLE': 'Motorcycle',
-            'SCOOTER': 'Scooter',
+            # 'CAR': 'Car',
+            # 'PEDESTRIAN': 'Pedestrian',
+            # 'BIKE': 'Cyclist',
+            # 'MOTORCYCLE': 'Motorcycle',
+            # 'SCOOTER': 'Scooter',
             'TREE': 'Tree',
-            'TRAFFIC SIGN': 'TrafficSign',
-            'CANOPY': 'Canopy',
-            'TRAFFIC LIGHT': 'TrafficLight',
-            'BIKE RACK': 'BikeRack',
-            'BOLLARD': 'Bollard',
-            'CONSTRUCTION BARRIER': 'ConstructionBarrier',
-            'PARKING KIOSK': 'ParkingKiosk',
-            'MAILBOX': 'Mailbox',
-            'FIRE HYDRANT': 'FireHydrant',
-            'FREESTANDING PLANT': 'FreestandingPlant',
-            'POLE': 'Pole',
-            'INFORMATIONAL SIGN': 'InformationalSign',
-            'DOOR': 'Door',
-            'FENCE': 'Fence',
-            'RAILING': 'Railing',
-            'CONE': 'Cone',
-            'CHAIR': 'Chair',
-            'BENCH': 'Bench',
-            'TABLE': 'Table',
-            'TRASH CAN': 'TrashCan',
-            'NEWSPAPER DISPENSER': 'NewspaperDispenser',
-            'ROOM LABEL': 'RoomLabel',
-            'STANCHION': 'Stanchion',
-            'SANITIZER DISPENSER': 'SanitizerDispenser',
-            'CONDIMENT DISPENSER': 'CondimentDispenser',
-            'VENDING MACHINE': 'VendingMachine',
-            'EMERGENCY AID KIT': 'EmergencyAidKit',
-            'FIRE EXTINGUISHER': 'FireExtinguisher',
-            'COMPUTER': 'Computer',
-            'TELEVISION': 'Television',
-            'OTHER': 'Other',
-            'HORSE': 'Other',
-            'PICKUP TRUCK': 'PickupTruck',  
-            'DELIVERY TRUCK': 'DeliveryTruck', 
-            'SERVICE VEHICLE': 'ServiceVehicle', 
-            'UTILITY VEHICLE': 'UtilityVehicle',
-            'FIRE ALARM': 'FireAlarm',
-            'ATM': 'ATM',
-            'CART': 'Cart',
-            'COUCH': 'Couch',
-            'TRAFFIC ARM': 'TrafficArm',
-            'WALL SIGN': 'WallSign',
-            'FLOOR SIGN': 'FloorSign',
-            'DOOR SWITCH': 'DoorSwitch',
-            'EMERGENCY PHONE': 'EmergencyPhone',
-            'DUMPSTER': 'Dumpster',
-            'VACUUM CLEANER': 'VacuumCleaner',
-            'SEGWAY': 'Segway',
-            'BUS': 'Bus',
-            'SKATEBOARD': 'Skateboard',
-            'WATER FOUNTAIN': 'WaterFountain'
+            # 'TRAFFIC SIGN': 'TrafficSign',
+            # 'CANOPY': 'Canopy',
+            # 'TRAFFIC LIGHT': 'TrafficLight',
+            # 'BIKE RACK': 'BikeRack',
+            # 'BOLLARD': 'Bollard',
+            # 'CONSTRUCTION BARRIER': 'ConstructionBarrier',
+            # 'PARKING KIOSK': 'ParkingKiosk',
+            # 'MAILBOX': 'Mailbox',
+            # 'FIRE HYDRANT': 'FireHydrant',
+            # 'FREESTANDING PLANT': 'FreestandingPlant',
+            # 'POLE': 'Pole',
+            # 'INFORMATIONAL SIGN': 'InformationalSign',
+            # 'DOOR': 'Door',
+            # 'FENCE': 'Fence',
+            # 'RAILING': 'Railing',
+            # 'CONE': 'Cone',
+            # 'CHAIR': 'Chair',
+            # 'BENCH': 'Bench',
+            # 'TABLE': 'Table',
+            # 'TRASH CAN': 'TrashCan',
+            # 'NEWSPAPER DISPENSER': 'NewspaperDispenser',
+            # 'ROOM LABEL': 'RoomLabel',
+            # 'STANCHION': 'Stanchion',
+            # 'SANITIZER DISPENSER': 'SanitizerDispenser',
+            # 'CONDIMENT DISPENSER': 'CondimentDispenser',
+            # 'VENDING MACHINE': 'VendingMachine',
+            # 'EMERGENCY AID KIT': 'EmergencyAidKit',
+            # 'FIRE EXTINGUISHER': 'FireExtinguisher',
+            # 'COMPUTER': 'Computer',
+            # 'TELEVISION': 'Television',
+            # 'OTHER': 'Other',
+            # 'HORSE': 'Other',
+            # 'PICKUP TRUCK': 'PickupTruck',  
+            # 'DELIVERY TRUCK': 'DeliveryTruck', 
+            # 'SERVICE VEHICLE': 'ServiceVehicle', 
+            # 'UTILITY VEHICLE': 'UtilityVehicle',
+            # 'FIRE ALARM': 'FireAlarm',
+            # 'ATM': 'ATM',
+            # 'CART': 'Cart',
+            # 'COUCH': 'Couch',
+            # 'TRAFFIC ARM': 'TrafficArm',
+            # 'WALL SIGN': 'WallSign',
+            # 'FLOOR SIGN': 'FloorSign',
+            # 'DOOR SWITCH': 'DoorSwitch',
+            # 'EMERGENCY PHONE': 'EmergencyPhone',
+            # 'DUMPSTER': 'Dumpster',
+            # 'VACUUM CLEANER': 'VacuumCleaner',
+            # 'SEGWAY': 'Segway',
+            # 'BUS': 'Bus',
+            # 'SKATEBOARD': 'Skateboard',
+            # 'WATER FOUNTAIN': 'WaterFountain'
         }
         #MAP Classes not found in KITTI to DontCare
         for class_type in self.type_list:
@@ -190,6 +193,7 @@ class CODa2KITTI(object):
         self.workers = int(workers)
         self.split = split
         self.test_mode = test_mode
+        self.overfit = overfit
 
         self.label_save_dir = f'{self.save_dir}/label_'
         self.label_all_save_dir = f'{self.save_dir}/label_all'
@@ -229,7 +233,22 @@ class CODa2KITTI(object):
             assert os.path.isfile(mfile), '%s does not exist' % mfile
             meta_json = json.load(open(mfile, "r"))
 
+            # Add logic to filter out bbox label files with no valid labels
             label_list = meta_json["ObjectTracking"][self.split]
+            
+            filtered_label_list = []
+            # Open each json and make sure it has at least one valid label
+            for label_path in label_list:
+                label_file = join(self.load_dir, label_path)
+                assert isfile(label_file), "Label file does not exist: %s" % label_file
+                label_dict = json.load(open(label_file, "r"))
+                
+                labels = [bbox_label for bbox_label in label_dict['3dbbox'] if bbox_label['classId'].upper() in self.coda_to_kitti_class_map.keys() and self.coda_to_kitti_class_map[bbox_label['classId'].upper()] != 'DontCare']
+                if len(labels)==0:
+                    continue
+                filtered_label_list.append(label_path)
+            
+            label_list = filtered_label_list
             self.bbox_label_files.extend(label_list)
 
             lidar_list = [label_path.replace('3d_label', '3d_raw').replace('.json', '.bin') 
@@ -248,16 +267,34 @@ class CODa2KITTI(object):
         elif self.split=="validation":
             imageset_file = "val.txt"
 
+        ### BEGINNING OF OVERFITTING CODE ##
+        split_list = [ imageset_file ]
+        if self.split=="training" and self.overfit:
+            split_list = ["train.txt", "val.txt", "test.txt"]
+            print("Overfitting mode enabled")
+
         imageset_path = join(self.imageset_save_dir, imageset_file)
         imageset_fp = open(imageset_path, 'w+')
-        
-        for lidar_path in self.lidar_files:
-            lidar_file = lidar_path.split('/')[-1]
-            _, _, traj, frame_idx = self.get_filename_info(lidar_file)
-            frame_name = f'{str(traj).zfill(2)}{str(frame_idx).zfill(5)}'
-            imageset_fp.write(frame_name+'\n')
-
+        for imageset_file in ["train.txt", "val.txt", "test.txt"]:
+            for lidar_path in self.lidar_files:
+                lidar_file = lidar_path.split('/')[-1]
+                _, _, traj, frame_idx = self.get_filename_info(lidar_file)
+                frame_name = f'{str(traj).zfill(2)}{str(frame_idx).zfill(5)}'
+                imageset_fp.write(frame_name+'\n')
         imageset_fp.close()
+
+        ### END OF OVERFITTING CODE ##
+
+        # imageset_path = join(self.imageset_save_dir, imageset_file)
+        # imageset_fp = open(imageset_path, 'w+')
+        
+        # for lidar_path in self.lidar_files:
+        #     lidar_file = lidar_path.split('/')[-1]
+        #     _, _, traj, frame_idx = self.get_filename_info(lidar_file)
+        #     frame_name = f'{str(traj).zfill(2)}{str(frame_idx).zfill(5)}'
+        #     imageset_fp.write(frame_name+'\n')
+
+        # imageset_fp.close()
 
     def convert(self):
         """Convert action."""
@@ -285,7 +322,7 @@ class CODa2KITTI(object):
     @staticmethod
     def set_filename_by_prefix(modality, sensor_name, trajectory, frame):
         if "2d_rect"==modality:
-            filetype = "jpg" # change to jpg later
+            filetype = "png" # change to jpg later
         elif "2d_bbox"==modality:
             filetype = "txt"
         elif "3d_raw"==modality:

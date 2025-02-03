@@ -33,12 +33,13 @@ def clean_data(gt_anno, dt_anno, current_class, difficulty):
     # CLASS_NAMES = ['Pedestrian'] # FOR JRDB Only
 
     # For non JRDB
-    CLASS_NAMES = [ 'Car', 'Pedestrian', 'Cyclist', 'Motorcycle', 'Scooter', 'Tree', 'TrafficSign', 'Canopy', 'TrafficLight', 'BikeRack', 'Bollard', 'ConstructionBarrier', 'ParkingKiosk', 'Mailbox', 'FireHydrant','FreestandingPlant', 'Pole', 'InformationalSign', 'Door', 'Fence', 'Railing', 'Cone', 'Chair', 'Bench',
-    'Table', 'TrashCan', 'NewspaperDispenser', 'RoomLabel', 'Stanchion', 'SanitizerDispenser',
-    'CondimentDispenser', 'VendingMachine', 'EmergencyAidKit', 'FireExtinguisher', 'Computer', 'Television',
-    'Other', 'PickupTruck', 'DeliveryTruck', 'ServiceVehicle', 'UtilityVehicle', 'FireAlarm', 'ATM', 'Cart',
-    'Couch', 'TrafficArm', 'WallSign', 'FloorSign', 'DoorSwitch', 'EmergencyPhone', 'Dumpster',
-    'VacuumCleaner', 'Segway', 'Bus', 'Skateboard', 'WaterFountain']
+    # CLASS_NAMES = [ 'Car', 'Pedestrian', 'Cyclist', 'Motorcycle', 'Scooter', 'Tree', 'TrafficSign', 'Canopy', 'TrafficLight', 'BikeRack', 'Bollard', 'ConstructionBarrier', 'ParkingKiosk', 'Mailbox', 'FireHydrant','FreestandingPlant', 'Pole', 'InformationalSign', 'Door', 'Fence', 'Railing', 'Cone', 'Chair', 'Bench',
+    # 'Table', 'TrashCan', 'NewspaperDispenser', 'RoomLabel', 'Stanchion', 'SanitizerDispenser',
+    # 'CondimentDispenser', 'VendingMachine', 'EmergencyAidKit', 'FireExtinguisher', 'Computer', 'Television',
+    # 'Other', 'PickupTruck', 'DeliveryTruck', 'ServiceVehicle', 'UtilityVehicle', 'FireAlarm', 'ATM', 'Cart',
+    # 'Couch', 'TrafficArm', 'WallSign', 'FloorSign', 'DoorSwitch', 'EmergencyPhone', 'Dumpster',
+    # 'VacuumCleaner', 'Segway', 'Bus', 'Skateboard', 'WaterFountain']
+    CLASS_NAMES = ['Tree']
     MIN_HEIGHT = [40, 25, 25]
     MAX_OCCLUSION = [0, 1, 2]
     MAX_TRUNCATION = [0.15, 0.3, 0.5]
@@ -762,7 +763,7 @@ def get_official_eval_result(gt_annos, dt_annos, current_classes, PR_detail_dict
     class_to_name = {}
     for cls_idx, cls_name in enumerate(current_classes):
         class_to_name[cls_idx] = cls_name
-
+    
     name_to_class = {v: n for n, v in class_to_name.items()}
     if not isinstance(current_classes, (list, tuple)):
         current_classes = [current_classes]
