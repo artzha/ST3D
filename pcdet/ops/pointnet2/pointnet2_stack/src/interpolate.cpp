@@ -8,7 +8,8 @@ All Rights Reserved 2019-2020.
 #include <torch/serialize/tensor.h>
 #include <vector>
 // #include <THC/THC.h>
-#include <ATen/ATen.h>
+#include <ATen/cuda/CUDAContext.h>
+#include <ATen/cuda/CUDAEvent.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>

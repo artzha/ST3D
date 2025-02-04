@@ -10,7 +10,8 @@ All Rights Reserved 2019-2020.
 #include <cuda_runtime_api.h>
 #include <vector>
 // #include <THC/THC.h>
-#include <ATen/ATen.h>
+#include <ATen/cuda/CUDAContext.h> 
+#include <ATen/cuda/CUDAEvent.h>
 #include "group_points_gpu.h"
 
 // extern THCState *state;

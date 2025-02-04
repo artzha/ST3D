@@ -36,7 +36,7 @@ if __name__ == '__main__':
         version=version,
         description='OpenPCDet is a general codebase for 3D object detection from point cloud',
         install_requires=[
-            'numpy<=1.21',
+            'numpy>=1.24',
             'llvmlite',
             'numba',
             'tensorboardX',
